@@ -1,0 +1,98 @@
+#include<stdlib.h>
+#include<mpi.h>
+#define ARRAY_SIZE 10
+int main(int argc,char*argv[])
+{
+int rank,size;
+int i,sum=0;
+int data[ARRAY_SIZE];
+MPI_Init(&argc,&argv);
+MPI_Comm_rank(MPI_COMM_WORLD,&rank);
+MPI_Comm_size(MPI_COMM_WORLD,&size);
+if(rank==0)
+{
+ printf("Generating random data...\n");
+for(i=0;i<ARRAY_SIZE;i++)
+{
+data[i]=rand()%100;
+printf("The array is:%d\n",data[i]);
+}
+}
+int chunk_size=ARRAY_SIZE;
+int *chunk=(int*)malloc(chunk_size*sizeof(int));
+MPI_Scatter(data,chunk_size,MPI_INT,chunk,chunk_size,MPI_INT,0,MPI_COMM_WORLD);
+int local_sum=0;
+for(i=0;i<chunk_size;i++)
+{
+local_sum +=data[i];
+printf("The local sum is:%d\n",local_sum);
+}
+MPI_Reduce(&local_sum,&sum,1,MPI_INT,MPI_SUM,0,MPI_COMM_WORLD);
+if(rank==0)
+{
+printf("The final sum is:%d\n",sum);
+}
+free(chunk);
+MPI_Finalize():
+return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+#include<stdlib.h>
+#include<mpi.h>
+#define ARRAY_SIZE 10
+int main(int argc,char*argv[])
+{
+int rank,size;
+int i,sum=0;
+int data[ARRAY_SIZE];
+MPI_Init(&argc,&argv);
+MPI_Comm_rank(MPI_COMM_WORLD,&rank);
+MPI_Comm_size(MPI_COMM_WORLD,&size);
+if(rank==0)
+{
+ printf("Generating random data...\n");
+for(i=0;i<ARRAY_SIZE;i++)
+{
+data[i]=rand()%100;
+printf("The array is:%d\n",data[i]);
+}
+}
+int chunk_size=ARRAY_SIZE;
+int *chunk=(int*)malloc(chunk_size*sizeof(int));
+MPI_Scatter(data,chunk_size,MPI_INT,chunk,chunk_size,MPI_INT,0,MPI_COMM_WORLD);
+local_min=data[0];
+local_max=data[0];
+for(i=1;i<chunk_size;i++)
+{
+if(dat[i]<local_min)
+{
+local_min=data[i];
+}
+if(data[i]>local_max)
+{
+local_max=data[i];
+}
+}
+MPI_Reduce(&local_min,&min,1,MPI_INT,MPI_MIN,0,MPI_COMM_WORLD);
+MPI_Reduce(&local_max,&max,1,MPI_INT,MPI_MAX,0,MPI_COMM_WORLD);
+if(rank==0)
+{
+printf("The minimum number is:%d\n",min);
+printf("The maximun number is:%d\n",max);
+}
+free(chunk);
+MPI_Finalize();
+return 0;
+}
+
